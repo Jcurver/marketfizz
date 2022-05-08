@@ -50,7 +50,6 @@ import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import twilio from "twilio";
 
-
 // npm install nodemailer (nodemailer설치)
 // nodemailer 기초 설정
 const nodemailer = require("nodemailer");
@@ -64,10 +63,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // twilio 기초 설정
-const twilioClient = twilio(
-  process.env.TWILIO_SID,
-  process.env.TWILIO_TOKEN
-);
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
   req: NextApiRequest,
@@ -75,7 +71,7 @@ async function handler(
 ) {
   const { phone, email } = req.body;
 
-  const user = phone ? { phone: +phone } : email ? { email: email } : null; //...payload
+  const user = phone ? { phone } : email ? { email } : null; //...payload
 
   if (!user) return res.status(400).json({ ok: false });
 
@@ -110,7 +106,6 @@ async function handler(
     //   body: `your login token is ${randomToken}`,
     // });
     // console.log(message);
-
     // ## nodemailer Email 보내기
   } else if (email) {
     // const sendEmail = await transporter
@@ -135,4 +130,8 @@ async function handler(
 }
 
 // POST, GET 을 확인 하는 함수.. (일종의 미들웨어..)
-export default withHandler("POST",handler);
+export default withHandler({
+  method: "POST",
+  handler,
+  isPrivate: false,
+});
