@@ -131,7 +131,8 @@ async function handler(
 
 // POST, GET 을 확인 하는 함수.. (일종의 미들웨어..)
 export default withHandler({
-  method: "POST",
+  methods: [ "POST"],
+
   handler,
   isPrivate: false,
 });
