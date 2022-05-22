@@ -1,3 +1,4 @@
+import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import withHandler, { ResponseType } from '@libs/server/withHandler';
 import client from '@libs/server/client';
@@ -7,31 +8,33 @@ async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<ResponseType>
 ) {
-	const { token } = req.body;
-	const foundToken = await client.token.findUnique({
-		where: {
-			payload: token,
+	const {
+		body: { question },
+		session: { user },
+	} = req;
+	const post = await client.post.create({
+		data: {
+			question,
+			user: {
+				connect: {
+					id: user?.id,
+				},
+			},
 		},
-		// include: {user:true}
 	});
-	if (!foundToken) return res.status(404).end();
+	if (!req.session.user) {
+		res.json({ ok: false });
+	}
 
-	req.session.user = {
-		id: foundToken.userId,
-	};
-	await req.session.save();
-	await client.token.deleteMany({
-		where: {
-			userId: foundToken.userId,
-		},
+	res.json({
+		ok: true,
+		post,
 	});
-	res.json({ ok: true });
 }
 
 export default withApiSession(
 	withHandler({
 		methods: ['POST'],
 		handler,
-		isPrivate: false,
 	})
 );

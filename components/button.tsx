@@ -5,6 +5,10 @@ interface ButtonProps {
   text: string;
   [key: string]: any;
 }
+interface a
+{
+  
+}
 
 export default function Button({
   large = false,

@@ -34,7 +34,7 @@ async function handler(
     const product = await client.product.create({
       data: {
         name,
-        price: +price,
+        // price: +price,
         description,
         image: "xx",
         user: {
@@ -44,8 +44,7 @@ async function handler(
         },
       },
     });
-    res.json({
-      ok: true,
+    res.json({ ok: true,
       product,
     });
   }
