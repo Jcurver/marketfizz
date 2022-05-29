@@ -9,9 +9,10 @@ async function handler(
 	res: NextApiResponse<ResponseType>
 ) {
 	const {
-		query: { id },
+		query: { id,latitude,longitude },
 		session: { user },
 	} = req;
+
 	const post = await client.post.findUnique({
 		where: {
 			id: +id.toString(),
@@ -35,12 +36,13 @@ async function handler(
 							avatar: true,
 						},
 					},
+					createdAt: true,
 				},
 			},
 			_count: {
 				select: {
 					answers: true,
-					Wondering: true,
+					wondering: true,
 				},
 			},
 		},

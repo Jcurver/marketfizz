@@ -44,6 +44,7 @@ const CommunityPostDetail: NextPage = () => {
 	const { data, mutate } = useSWR<CommunityPostResponse>(
 		router.query.id ? `/api/posts/${router.query.id}` : null
 	);
+	console.log(data);
 	const [wonder, { loading }] = useMutation(
 		`/api/posts/${router.query.id}/wonder`
 	);
@@ -79,8 +80,9 @@ const CommunityPostDetail: NextPage = () => {
 	useEffect(() => {
 		if (answerData?.ok) {
 			reset();
+			mutate();
 		}
-	}, [answerData, reset]);
+	}, [answerData, reset, mutate]);
 	return (
 		<Layout canGoBack>
 			<div>
