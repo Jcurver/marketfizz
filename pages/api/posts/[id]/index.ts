@@ -1,4 +1,4 @@
-import { withIronSessionApiRoute } from 'iron-session/next';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import withHandler, { ResponseType } from '@libs/server/withHandler';
 import client from '@libs/server/client';
@@ -9,7 +9,7 @@ async function handler(
 	res: NextApiResponse<ResponseType>
 ) {
 	const {
-		query: { id,latitude,longitude },
+		query: { id, latitude, longitude },
 		session: { user },
 	} = req;
 
@@ -38,7 +38,10 @@ async function handler(
 					},
 					createdAt: true,
 				},
+				take: 10,
+				skip: 10,
 			},
+
 			_count: {
 				select: {
 					answers: true,

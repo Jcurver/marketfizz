@@ -17,7 +17,7 @@ interface ReviewResponse {
 const Profile: NextPage = () => {
 	const { user } = useUser();
 	const { data } = useSWR<ReviewResponse>('/api/reviews');
-	console.log('data::', data);
+
 	return (
 		<Layout hasTabBar title="나의 캐럿">
 			<div className="px-4">

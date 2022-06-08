@@ -2,42 +2,41 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import withHandler, { ResponseType } from '@libs/server/withHandler';
 import client from '@libs/server/client';
-import { withApiSession } from '../../../../libs/server/withSession';
+import { withApiSession } from '@libs/server/withSession';
+import Id from '../../posts/[id]';
+
+
 
 async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<ResponseType>
 ) {
 	const {
+		query: { id },
+		body,
 		session: { user },
 	} = req;
-
-	const favs = await client.fav.findMany({
-		where: {
-			userId: user?.id,
-		},
-		include: {
-			product: {
-				include: {
-					_count: {
-						select: {
-							favs: true,
-						},
-					},
+	const message = await client.message.create({
+		data: {
+      message:body.message,
+      stream: {
+        connect: {
+          id:+id.toString()
+        }
+      },
+			user: {
+				connect: {
+					id: user?.id,
 				},
 			},
 		},
 	});
-
-	res.json({
-		ok: true,
-		favs,
-	});
+	res.json({ ok: true, message });
 }
 
 export default withApiSession(
 	withHandler({
-		methods: ['GET'],
+		methods: ['POST'],
 
 		handler,
 	})
