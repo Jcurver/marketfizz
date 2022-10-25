@@ -1,4 +1,4 @@
-# JH Market
+# MarketFizz
 
-Serverless Carrot Market Clone using NextJS, Tailwind, Prisma, PlanetScale and Cloudflare.
-# jhmarket
+Serverless. using NextJS, Tailwind, Prisma, PlanetScale and Cloudflare.
+
